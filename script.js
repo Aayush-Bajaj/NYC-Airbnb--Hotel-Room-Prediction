@@ -23,7 +23,7 @@ const INTS = ["minimum_nights","number_of_reviews","calculated_host_listings_cou
 const FLOATS = ["latitude","longitude","price","reviews_per_month"];
 
 // Change this to your deployed API address when you go live.
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "https://nyc-airbnb-hotel-room-prediction.onrender.com";
 
 const $ = id => document.getElementById(id);
 const $$ = s => [...document.querySelectorAll(s)];
