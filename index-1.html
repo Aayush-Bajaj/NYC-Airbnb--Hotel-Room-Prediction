@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roomsense – Predict the room type</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="glow" aria-hidden="true"></div>
+<div class="grid-bg" aria-hidden="true"></div>
+
+<header>
+  <div class="brand"><span class="dot"></span>Roomsense</div>
+</header>
+
+<main>
+  <section class="hero">
+    <h1 id="headline">Guess the room before the guest books it.</h1>
+    <p class="lede">Answer three short steps about a listing. Our model tells you if it's an entire home, a private room or a shared room.</p>
+    <div class="presets">
+      <span>Try an example:</span>
+      <button class="chip" type="button" data-preset="manhattan">Manhattan loft</button>
+      <button class="chip" type="button" data-preset="brooklyn">Brooklyn room</button>
+      <button class="chip" type="button" data-preset="queens">Budget in Queens</button>
+    </div>
+  </section>
+
+  <form class="card" id="form" novalidate>
+    <div class="stepper" aria-hidden="true">
+      <div class="bar"><div id="progress"></div></div>
+      <button type="button" class="s on" data-go="0">Location</button>
+      <button type="button" class="s" data-go="1">Pricing</button>
+      <button type="button" class="s" data-go="2">Reviews</button>
+    </div>
+
+    <div class="step show" data-step="0">
+      <h2>Where is the listing?</h2>
+      <span class="lbl">Borough</span>
+      <div class="pills" id="boroughs" role="radiogroup" aria-label="Borough">
+        <button type="button" class="pill" data-v="Manhattan">Manhattan</button>
+        <button type="button" class="pill" data-v="Brooklyn">Brooklyn</button>
+        <button type="button" class="pill" data-v="Queens">Queens</button>
+        <button type="button" class="pill" data-v="Bronx">Bronx</button>
+        <button type="button" class="pill" data-v="Staten Island">Staten Island</button>
+      </div>
+      <input type="hidden" id="neighbourhood_group">
+      <div class="row">
+        <div class="field full"><label for="neighbourhood">Neighbourhood</label>
+          <input id="neighbourhood" list="hoods" placeholder="e.g. Harlem" autocomplete="off"><datalist id="hoods"></datalist></div>
+        <div class="field"><label for="latitude">Latitude</label>
+          <input id="latitude" type="number" step="any" min="-90" max="90" placeholder="40.7484"></div>
+        <div class="field"><label for="longitude">Longitude</label>
+          <input id="longitude" type="number" step="any" min="-180" max="180" placeholder="-73.9857"></div>
+      </div>
+    </div>
+
+    <div class="step" data-step="1">
+      <h2>What does it cost?</h2>
+      <div class="row">
+        <div class="field full"><label for="price">Price per night</label>
+          <div class="money"><span>$</span><input id="price" type="number" step="any" min="0.01" placeholder="150"></div></div>
+        <div class="field full"><label for="minimum_nights">Minimum nights <output id="o_min">1</output></label>
+          <input id="minimum_nights" type="range" min="1" max="365" value="1"></div>
+        <div class="field full"><label for="availability_365">Days available per year <output id="o_av">180</output></label>
+          <input id="availability_365" type="range" min="0" max="365" value="180"></div>
+      </div>
+    </div>
+
+    <div class="step" data-step="2">
+      <h2>How active is the host?</h2>
+      <div class="row">
+        <div class="field"><label for="number_of_reviews">Total reviews</label>
+          <input id="number_of_reviews" type="number" min="0" step="1" placeholder="42"></div>
+        <div class="field"><label for="reviews_per_month">Reviews per month</label>
+          <input id="reviews_per_month" type="number" min="0" step="any" placeholder="1.2"></div>
+        <div class="field full"><label for="calculated_host_listings_count">Listings owned by this host</label>
+          <input id="calculated_host_listings_count" type="number" min="0" step="1" placeholder="1"></div>
+      </div>
+    </div>
+
+    <p class="msg" id="msg" role="alert"></p>
+    <div class="nav">
+      <button type="button" class="ghost" id="back" disabled>Back</button>
+      <button type="button" class="btn" id="next">Next step</button>
+      <button type="submit" class="btn" id="predict" hidden><span class="spin"></span><span id="ptext">Predict room type</span></button>
+    </div>
+  </form>
+</main>
+
+<footer>Predictions are estimates from a machine-learning model.</footer>
+
+<div class="overlay" id="overlay" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="Prediction result">
+    <div class="ring">
+      <svg viewBox="0 0 120 120"><circle class="t" cx="60" cy="60" r="54"/><circle class="f" id="arc" cx="60" cy="60" r="54"/></svg>
+      <div class="pct"><b id="pct">0</b><small>%</small></div>
+    </div>
+    <p class="k">Predicted room type</p>
+    <h3 id="label"></h3>
+    <div id="bars"></div>
+    <div class="nav"><button type="button" class="ghost" id="edit">Edit details</button><button type="button" class="btn" id="again">New prediction</button></div>
+  </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
